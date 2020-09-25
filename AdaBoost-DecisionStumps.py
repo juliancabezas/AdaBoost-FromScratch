@@ -33,18 +33,18 @@ class Adaboost:
 
     def fit(self,x,y,):
 
-        n_samples, n_features = x.size
+        n_rows, n_columns = x.shape
+
+        # Initialize the weights for the first iteration
+        weights = np.full(n_samples, (1 / n_rows)) 
 
         for i in range(n_learners):
 
-        # Create a decision stump 
-        decision_stump = DecisionStump()
+            # Create a decision stump 
+            decision_stump = DecisionStump()
 
-        # Initialize the weights
-        w = np.full(n_samples, (1 / n_samples)) 
-
-        # Fit the decision stump using the weights
-        decision_stump.fit(x = x, y = y, w = w)
+            # Fit the decision stump using the weights
+            decision_stump.fit(x = x, y = y, weights = weights)
 
         
 
@@ -88,7 +88,17 @@ x_test = x_full.iloc[300:,:]
 print("Step 1: Model fitting")
 print("")
 
+# Create a decision stump 
+decision_stump = DecisionStump()
 
+# Fit the decision stump using the weights
+decision_stump.fit(x = x_train, y = y_train)
+
+prediction = decision_stump.predict(x = x_train)
+
+print(prediction)
+
+print(prediction == y_train)
 
 print("")
 
