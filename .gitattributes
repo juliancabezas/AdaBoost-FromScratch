@@ -1,0 +1,13 @@
+
+*.tex linguist-detectable=false
+*.bib linguist-detectable=false
+*.sty linguist-detectable=false
+*.bbl linguist-detectable=false
+*.aux linguist-detectable=false
+*.blg linguist-detectable=false
+*.log linguist-detectable=false
+*.synctex.gz linguist-detectable=false
+*.snm linguist-detectable=false
+*.nav linguist-detectable=false
+*.toc linguist-detectable=false
+*.bst linguist-detectable=false
