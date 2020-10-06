@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: Assingment_ML_SVM_Cabezas.aux
+The style file: ieeetr.bst
+Database file #1: library.bib
+Repeated entry---line 6560 of file library.bib
+ : @book{Bishop2006
+ :                 ,
+I'm skipping whatever remains of this entry
+Warning--can't use both author and editor fields in Bishop2006
+Warning--empty publisher in Hastie2009
+You've used 4 entries,
+            1876 wiz_defined-function locations,
+            509 strings with 4435 characters,
+and the built_in function-call counts, 1043 in all, are:
+= -- 84
+> -- 69
+< -- 0
++ -- 25
+- -- 21
+* -- 80
+:= -- 166
+add.period$ -- 7
+call.type$ -- 4
+change.case$ -- 1
+chr.to.int$ -- 0
+cite$ -- 6
+duplicate$ -- 46
+empty$ -- 93
+format.name$ -- 21
+if$ -- 239
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 7
+newline$ -- 18
+num.names$ -- 4
+pop$ -- 20
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 20
+stack$ -- 0
+substring$ -- 40
+swap$ -- 15
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 7
+width$ -- 5
+write$ -- 38
+(There was 1 error message)

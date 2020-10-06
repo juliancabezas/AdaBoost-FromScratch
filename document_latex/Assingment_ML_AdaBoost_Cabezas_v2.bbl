@@ -1,0 +1,64 @@
+\begin{thebibliography}{10}
+
+\bibitem{Bishop2006}
+C.~M. Bishop, {\em {Pattern Recognition and Machine Learning}}.
+\newblock New York, NY, USA: Springer, 2006.
+
+\bibitem{Hastie2009}
+T.~Hastie, R.~Tibshirani, and J.~Friedman, {\em {The Elements of Statistical
+  Learning}}.
+\newblock 2009.
+
+\bibitem{Freund1999}
+Y.~Freund and R.~E. Schapire, ``{A Short Introduction to Boosting},'' {\em
+  Journal of Japanese Society for Artificial Intelligence}, vol.~14, no.~5,
+  pp.~771--780, 1999.
+
+\bibitem{Schapire1998}
+R.~E. Schapire, Y.~Freund, P.~Bartlett, and W.~S. Lee, ``{Boosting the margin:
+  A new explanation for the effectiveness of voting methods},'' {\em Annals of
+  Statistics}, vol.~26, no.~5, pp.~1651--1686, 1998.
+
+\bibitem{Mason2000}
+L.~Mason, J.~Baxter, P.~Bartlett, and M.~Frean, ``{Boosting algorithms as
+  gradient descent},'' {\em Advances in Neural Information Processing Systems},
+  no.~September 2012, pp.~512--518, 2000.
+
+\bibitem{Oliver1994}
+J.~J. Oliver and D.~Hand, ``{Averaging over decision stumps},'' in {\em Lecture
+  Notes in Computer Science (including subseries Lecture Notes in Artificial
+  Intelligence and Lecture Notes in Bioinformatics)}, vol.~784 LNCS,
+  pp.~231--241, 1994.
+
+\bibitem{Bellazzi2008}
+R.~Bellazzi and B.~Zupan, ``{Predictive data mining in clinical medicine:
+  Current issues and guidelines},'' 2008.
+
+\bibitem{afarap2018}
+A.~F.~M. Agarap, ``{On Breast Cancer Detection: An Application of Machine
+  Learning Algorithms on the Wisconsin Diagnostic Dataset},'' in {\em ICMLSC
+  '18 Proceedings of the 2nd International Conference on Machine Learning and
+  Soft Computing}, (New York, NY, USA), pp.~5--9, Association for Computing
+  Machinery, 2018.
+
+\bibitem{Street1993}
+W.~N. Street, W.~H. Wolberg, and O.~L. Mangasarian, ``{Nuclear Feature
+  Extraction For Breast Tumor Diagnosis},'' in {\em International Symposium on
+  Electronic Imaging? Scienceand Technology}, vol.~1905, pp.~861--870, 1993.
+
+\bibitem{Pedregosa2011}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay, ``{Scikit-learn:
+  Machine Learning in Python},'' {\em Journal of Machine Learning Research},
+  vol.~12, pp.~2825--2830, 2011.
+
+\bibitem{Zhu2009}
+J.~Zhu, H.~Zou, S.~Rosset, and T.~Hastie, ``{Multi-class AdaBoost},'' {\em
+  Statistics and its interface}, vol.~2, pp.~349--360, 2009.
+
+\bibitem{Vapnik1995}
+V.~N. Vapnik, {\em {The Nature of Statistical Learning Theory}}.
+\newblock New York, NY, USA: Springer, 1995.
+
+\end{thebibliography}

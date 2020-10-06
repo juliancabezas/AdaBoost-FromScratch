@@ -1,0 +1,336 @@
+\documentclass[11pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+
+% Box for the confusion matrix
+\newcommand\MyBox[2]{
+	\fbox{\lower0.75cm
+		\vbox to 1.7cm{\vfil
+			\hbox to 1.7cm{\hfil\parbox{1.1cm}{#1#2}\hfil}
+			\vfil}%
+	}%
+}
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@verbatim}
+{\verbatim@font}
+{\verbatim@font\scriptsize}
+{}{}
+\makeatother
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+%\ifcvprfinal\pagestyle{empty}\fi
+\setcounter{page}{1}
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{Assignment 2 \\ COMP SCI 7209 - Introduction to Statistical Machine Learning\\ AdaBoost implementation}
+
+\author{Julian Cabezas Pena\\
+Student ID: a1785086\\
+University of Adelaide, SA 5005 Australia\\
+{\tt\small julian.cabezaspena@student.adelaide.edu.au}
+% For a paper whose authors are all at the same institution,
+% omit the following lines up until the closing ``}''.
+% Additional authors and addresses can be added with ``\and'',
+% just like the second author.
+% To save space, use either the email address or home page, not both
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+
+%%%%%%%%% BODY TEXT
+\section{Introduction}
+
+One of the most common applications of machine learning techniques is their utilization in classification problems, where an algorithm takes a vector or array of input data, and assigns it to one or many discrete classes \cite{Bishop2006}. These algorithms usually depend on the availability of labelled data ans its corresponding attributes or explanatory variables, and thus are classified in the field of supervised learning \cite{Hastie2009}. 
+
+Boosting is based on the simple premise of combining the output of several weak classifiers, such as simple decision trees,to generate a most accurate "committee" . In these kind of algorithm, a set of weak learners are trained in sequence result \cite{Hastie2009}. One of the most common boosting algorithms is the Adaptative Booting (AdaBoost), that iteratively calls a base or weak algorithm, that is fitted on the dataset, in each of the iterations the algorithm is trained over a different set of weights on a defined distribution, that are ajusted to assign a larger weight to the misclassified samples in the previous iteration \cite{Freund1999}.
+
+In the field of classification problems, the diagnosis or determination of he risk of diseases based on clinical data is a recurrent field of study. These classification algorithms can help decision makers to predict the patient outcome based on the patient data \cite{Bellazzi2008}, making appropriate and well-timed decisions. One of the diseases that has been researched in this field is the breast cancer, that is one of the most common cancers along with the lung, bronchus, prostate, colon and pancreas cancers \cite{afarap2018}. 
+
+The objective of this project is to implement the Adaptative Boosting (AdaBoost) method using a simple decision stump as weak learner. The implemented methods will be compared with the AdaBoost method implemented in the commonly used Scikit-learn package, and also with the Support vector Machine(SVM) algorithm. The testing and comparison will be performed using the Wisconsin Breast Cancer Dataset to predict whether the breast cancer is malign or benign based on a set of observed attributes
+
+%-------------------------------------------------------------------------
+
+
+\section{Methods}
+
+\subsection{Wisconsin Breast Cancer Dataset}
+
+The Wisconsin Breast Cancer Dataset was created by Street \textit{et al} \cite{Street1993} using a expert personal interpretation of image over a interactive interface to delineate the shape of nuclei of malign and benign breast cancer imagery, extracting features related to the nuclear size, shape and texture. This data consists in a total of 569 samples with 30 numerical continuous features. This dataset is frequently used to lustrate classification problems, determining weather the observed patient presents a malign or benign tumour based on its recorded characteristics \cite{afarap2018}
+
+In order to train the models, the first 300 samples of the dataset were used as trainign set and the remaining 269 as test data. The only preprocessing that was performed was the encoding of the target variable, that magign (M) tumours were encoded ad +1 and benign cancers as +1
+
+\subsection{AdaBoost method}
+
+In this paper, the implementation of the AdaBoost algorithm follows the steps described by Freund and Schapire \cite{Freund1999}. If we have a matrix of features $X$ containing $n$ observations and a label $y$ also containing $n$ observations, and we have that $y = {-1,+1}$. We can train $M$ weak or base learners ($G(x)$).
+
+Firstly, the weights are initialized as $W_1 = 1/n$. 
+
+Then for each iteration of the algorithm $m = 1,2,3...M$:
+
+- Train a weak learner $G_m(x)$ using the weights $W_m$
+
+- Calculate the error using:
+
+\begin{equation}
+	err_m = \sum_{i=1}^{N} W_i I(y_i \neq G_m(x_i))
+\end{equation}
+
+- Calculate the $\alpha$ value as
+
+\begin{equation}
+	\alpha_m = \frac{1}{2}ln(\frac{1-err_m}{err_m})
+\end{equation}
+
+-Update the weights of the samples using the following equation, that results in the weights adding  a total of 1:
+
+\begin{equation}
+	W_{m+1} (i) = \frac{W_m exp(-\alpha_m y_i g_m(x_i))}{\sum_{i=1}^{N} W_i}
+\end{equation}
+
+Then, to generate the prediction using the ensemble of weak learners, the $\alpha$ of each iteration acts like the weights of each learner, as:
+
+\begin{equation}
+	G(X) = sign(\sum_{m=1}^{M} \alpha_m g_m(x))
+\end{equation}
+
+Thus, the output of the AdaBoost algorithm can can is -1 or +1
+
+\subsubsection{Weak learner: Decision Stump}
+
+In order to train the AdaBoost algorithm, a base learner, that is usually slightly better than random guessing, has to be applied \cite{Freund1999}. In this case, a simple decision stump was used. The decision stump is supervised algorithm that involves using a single feature to classify the sampling a threshold that minimizes the error or the amount of misclassifications in the data \cite{Oliver1994}, they can be also interpresed as desicion trees of depth equal to one. this kind of weak learner is commonly used in implementations of AdaBoost \cite{Hastie2009}
+
+In this case, to construct the decision tree, a greedy method was implemented. The decision stump algorithm goes feature by feature testing a number of threshold values equivalent to the number of samples, starting from the minimum value and finishing in the maximum value, the threshold values that are tested are evenly distributed between these values. Aditionally, the threshold values are tested using two different polarities (classifying the samples to -1 or +1 depending on the side of the threshold they are located)
+
+The error of the classification, used to pick the best threshold, polarity and feature, was measured using the following equation \cite{Freund1999}
+
+\begin{equation}
+	err = \sum_{i=1}^{N} W_i I(y_i \neq g(x_i))
+\end{equation}
+
+Where $g()$ is the weak learner and $w$ the set of weights in the corresponding iterations
+
+
+
+\subsection{Third Party AdaBoost Implementation: \textit{Scikit-learn}}
+
+In order to compare the custom AdaBoost implemented in this paper with a commonly used library implementation, a third party library was used to solve the classification problem. In this case, the Scikit-learn library was chosen due to its wide popularity in the machine learning community.
+
+\textit{Scikit-learn} is a Python library that integrates various tools for statistics and machine learning applications, that include classification, regression, metrics and feature selection, among many others. This library is distributed under a BSD licence and includes compiled code, that makes it very efficient. The library is built using other popular numerical Python libraries, such as \textit{Numpy} and \textit{Scipy} \cite{Pedregosa2011}.
+
+According to the library documentation, the AdaBoost classification algorithm that is implemented in this package use the Multi-class Adaboost algorithm variation introduced by Zhu \textit{et al} \cite{Zhu2009}. In this algorithm, the authors modified the originally proposed two class AdaBoost \cite{Freund1999} to include multiple class problems without separating the problem into several two class problems.
+
+In this algorithm, called SAMME, the procedure allows for the classification problem to deal with a set of $K$ distinct classes in the target variable. As follows \cite{Zhu2009}:
+
+Firstly, the weights are initialized as $W_1 = 1/n$. 
+
+Then for each iteration of the algorithm $m = 1,2,3...M$:
+
+- Train a weak learner $G_m(x)$ using the weights $W_m$
+
+- Calculate the error using:
+
+\begin{equation}
+	err_m = \frac{\sum_{i=1}^{N} W_i I(y_i \neq G_m(x_i))}{\sum_{i=1}^{N} W_i} 
+\end{equation}
+
+- Calculate the $\alpha$ value as
+
+\begin{equation}
+	\alpha_m = ln(\frac{1-err_m}{err_m}) + ln(K-1)
+\end{equation}
+
+-Update the weights of the samples using the following equation, that results in the weights adding  a total of 1:
+
+\begin{equation}
+	W_{m+1} (i) = \frac{W_m exp(-\alpha_m y_i g_m(x_i))}{\sum_{i=1}^{N} W_i}
+\end{equation}
+
+Then, to generate the prediction, the maximum number on each of the $k$ categories is used
+
+\begin{equation}
+	G(X) = argmax(\sum_{m=1}^{M} \alpha_m g_m(x) I(g_m(x) = k))
+\end{equation}
+
+In this case, as the SAMME algorithm is being used for a two class classification problem ($K = 2$), the term $ln(K+1)$ in equation XXXXXX becomes zero, making the calculation of $/alpha$ the same as in the custom AdaBoost implemented in this paper.
+
+In order to make a comparison y similar terms, the base learner that was applied is the decision tree implemented in the \textit{Scikit-learn} package, using a depth of 1, making the learner a decision stump in practice. 
+
+\subsection{Comparison with Support Vector Machine}
+
+The Adaboost implementations were compared with the Support Vector Machine classification algorithm. This supervised classification algorithm was developed by Vapnik \cite{Vapnik1995}, and consist in an hyperplane that separates a high dimensional space defined by the input variables into discrete classes. This hyperplane is defined to have the largest possible distances to the closest point of either class , thus, maximizing the margin between two classes. The Support Vector Machine has been extensively used in classification problems, as it can include a custom kernel, that can handle non linearly separable cases \cite{Hastie2009}.
+
+In this study, the AdaBoost methods were compared with the \textit{Scikit-learn} package implementation of the Support Vector Machine classifier, using different kernel functions to better adjust the data.
+
+\subsection{Train and testing}
+
+In order to asses the error in the training ans testing data for the AdaBoost implementation, different number of learners from 1 to 500 were tested, and the train and test errors were calculated as:
+
+\begin{equation}
+	Error = \frac{FP+FN}{TP+FP+TN+FN}
+\end{equation}
+
+Where $TP$ is the number of true positive, $TP$: true negative, $FP$: false positives and $FN$: false negatives.
+
+In the case of the SVM, the algorithm was tested using different cost values from 0.5 to 10, and testing a linear, polynomial, radial and sigmoid kernels.
+
+\subsection{Code}
+
+The code to reproduce this project was attached to this report. The primal and dual implementations of the models were programmed in Python 3.7 using only commonly used libraries such as numpy for numerical computation, pandas for the reading of databases and copy and os for general utilities.
+
+As the  testing of different number of learners in the case of the AdaBoost algorithm, or the testing of several C values and kernels in the case of SVM can take several hours (depending of the computing power of the equipment), the codes of the different implementations contain the saving of the results into a .csv file, that contains the results of the different parameter testing
+
+The instructions to run the attached codes can be found in Appendix 1, or in the accompanying README.txt file.
+
+\section{Results and discussion}
+
+\section{Analysis of the custom implementation}
+
+The custom implementation of the AdaBoost algorithm was tested using 1 to 500 iterations, giving the results that are shown in Figure \ref{fig:nlearners_adaboost_custom}, where it is possible to appreciate that the training value reaches an error equal to zero at 30 iterations, while the smaller test error (1.49\%) is archived with 100 iterations. After this point the custom algorithm results show a slight overfitting effect, presenting larger test error with more iterations, and reaching 3.35\% with iteration 400.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=1.0\linewidth]{nlearners_adaboost_custom.pdf}
+		\caption{Training and testing error with different number of weak learners using the AdaBoost implementation of this paper (custom) and the third party implementation (Sklearn)}
+		\label{fig:nlearners_adaboost_custom}
+	\end{center}
+\end{figure}
+
+\subsection{\textit{Scikit-learn} AdaBoost}
+
+The \textit{Scikit-learn} implementation of the AdaBoost algorithm, that uses the SAMME algorithm, similarly to the custom implementation, reach a minimum test error of 1.86\% using 110 iterations, and reaching 0\% train error with 30 iterations (Figure \ref{fig:nlearners_adaboost_sklearn}), just as in the custom implementation. After reaching the minimum text error, the \textit{Scikit-learn} implementation do not show a significant overfitting effect, not presenting errors greater than 3\% after iteration 140.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=1.0\linewidth]{nlearners_adaboost_sklearn.pdf}
+		\caption{Training and testing error with different number of weak learners using the AdaBoost implementation of this paper (custom) and the third party implementation (Sklearn)}
+		\label{fig:nlearners_adaboost_sklearn}
+	\end{center}
+\end{figure}
+
+\subsection{Support Vector Machine}
+
+The results of the \textit{Scikit-learn} Support Vector Machine implementation (Figure \ref{fig:svm}) show that in this case the best results overall results are presented by using a linear kernel. In this case, the smaller test error (4.09\%) is accomplished using a cost equal to 2.0 on the linear kernel, while the the radial and polynomial kernel reach worse results, in general above 5\% of error.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=1.0\linewidth]{cost_kernel_svm.pdf}
+	\end{center}
+	\caption{Training and testing error using different cost and kernel values}
+	\label{fig:svm}
+\end{figure}
+
+\subsection{Comparison of AdaBoost implementations and SVM}
+
+The best test error results (Table \ref{table:results}), show that the custom implementation reached a slightly smaller test error, that can be attributed to the greedy approach that was used to code the decision stump, that also caused the algorithm perform several times slower than the third party implementation
+
+On the other hand, the SVM algorithm, despite testing several cost values and types of kernels, did not acomplished to accurately predict the breast cancer class.
+
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|p{4cm}|p{1.5cm}|p{1.5cm}|}
+			\hline
+			Algorithm & Best test error & Training time \\
+			\hline\hline
+			Custom AdaBoost & 1.49\% & 0.9764\\
+			Scikit-learn AdaBoost & 1.86\% & 0.9774\\
+			Scikit-learn SVM (linear kernel) & 4.09\% & 0.9764\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Best test results for the implemented algorithm}
+	\label{table:results}
+\end{table}
+
+
+\section{Conclusion}
+
+This project showed that with enough understanding of the principles and processes
+behind a maximum margin classifier such as SVM, it is possible to implement an effective classification algorithm using convex optimization libraries. The implemented methods produced almost equal results when compared with third party implementations, showing that it is possible to program complex algorithms that can produce accurate results when the mathematics behind it are well understood.
+
+{\small
+\bibliographystyle{ieeetr}
+\bibliography{library}
+}
+
+
+\textbf{Appendix 1: Instructions on how to run the attached code:}
+
+This code was tested under a Linux 64 bit OS (Ubuntu 18.04 LTS), using Python 3.7.7
+
+In order to use this code:
+
+1. Install Miniconda or Anaconda
+2. Add conda forge to your list of channels
+
+In the terminal run:
+\begin{verbatim}
+conda config --add channels conda-forge
+\end{verbatim}
+
+3. Create a environment using the requirements.yml file included in this .zip:
+
+Open a terminal in the folder were the requirements.yml file is (Assign1-code) and run:
+
+\begin{verbatim}
+conda env create -f requirements.yml --name svm-env
+\end{verbatim}
+
+4. Make sure the folder structure of the project is as follows
+
+\begin{verbatim}
+Assign1-code
+├── Input_Data
+├── Cross_Validation
+├── Results
+├── support_vector_machine_primal_dual.py
+├── support_vector_machine_sklearn.py
+└── ...
+\end{verbatim}
+
+If there are csv files in the Cross\_Validation folder the code will read them to avoid the delay of the cross validation and go straight to fitting the models
+
+5.  Run the code in the conda environment: Open a terminal in the Assign1-code folder  and run 
+\begin{verbatim}
+conda activate svm-env
+python support_vector_machine_primal_dual.py
+\end{verbatim}
+
+or run the support\_vector\_machine\_primal\_dual.py code in your IDE of preference, (VS Code with the Python extension is recommended), using the root folder of the directory (Assign1-code) as working directory to make the relative paths work.
+
+6. For comparison, run the code of the SVM implementation in Scikit-learn
+\begin{verbatim}
+python support_vector_machine_sklearn.py
+\end{verbatim}
+Note: Alternatively, for 2 and 3 you can build your own environment following the package version contained in requirements.yml file
+
+\end{document}
+
+
+
